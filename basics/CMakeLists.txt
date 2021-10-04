@@ -7,4 +7,5 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # add the executable
-add_executable(basics motiv03.cpp)
+add_executable(motive03 motiv03.cpp)
+add_executable(motiv11 motiv11.cpp)
