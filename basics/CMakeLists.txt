@@ -9,3 +9,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # add the executable
 add_executable(motive03 motiv03.cpp)
 add_executable(motiv11 motiv11.cpp)
+add_executable(customer1 customer1.cpp)
+add_executable(customer2 customer2.cpp)
