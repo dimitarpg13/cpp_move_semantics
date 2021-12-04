@@ -19,3 +19,8 @@ The copy constructor is automatically generated when all of the following apply:
 * No move assignment operator is user-declared
 If generated (implicitly or with =default), the copy constructor has the following behavior:
 
+```cpp
+MyClass(const MyClass& obj) *noexcept-specifier*
+ : Base(obj), value(obj.value) {
+}
+```
