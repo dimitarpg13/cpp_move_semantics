@@ -89,5 +89,21 @@ A surprising consequence of the way the move semantics is defined is that you ca
 
 #### Initialize Members the Classical Way
 
+Consider a class with two string members, which we can initialize in the constructor. Such a class will typically be implemented like this:
 
+`basics/initclassic.hpp`
+```cpp
+#include <string>
 
+class Person {
+private:
+ std::string first; // first name
+ std::string last;  // last name
+public:
+ Person(const std::string& f, const std::string& l)
+  : first{f}, last{l} {
+ }
+ ...
+};
+```
+<img src="images/class_layout_pic1.png" width="473" height="324">
