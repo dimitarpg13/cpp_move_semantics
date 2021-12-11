@@ -106,4 +106,4 @@ public:
  ...
 };
 ```
-<img src="images/class_layout_pic1.png" width="473" height="324">
+<img src="images/class_layout_pic1.png" width="473" height="300">
