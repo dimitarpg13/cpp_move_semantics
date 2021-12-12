@@ -175,4 +175,17 @@ class Person {
 };
 ```
 
+This single constructor takes all possible arguments and ensures that we have only one allocation for each argument. 
+For example, if we pass two string literals:
+```cpp
+ Person p{"Ben", "Cook"}; 
+```
+we first use them to initialize the parameters `f` and `l`:
+
+<img src="images/class_layout_pic1.png" width="473" height="300">
+
+By using `std::move()`, we move the values of the parameters to the members. First, the member `first` steals the value from `f`. Then the member `last` steals the value from `l`:
+
+<img src="images/class_layout_pic4.png" width="473" height="300">
+
 
