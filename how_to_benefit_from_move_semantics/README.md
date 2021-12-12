@@ -188,4 +188,6 @@ By using `std::move()`, we move the values of the parameters to the members. Fir
 
 <img src="images/class_layout_pic4.png" width="473" height="300">
 
+Again, at the end of the constructor, the temporary strings are destroyed. This time it takes less time because the destructors of the strings no longer have to free allocated memory:
 
+<img src="images/class_layout_pic5.png" width="473" height="300">
