@@ -125,3 +125,54 @@ As a consequence, the copy constructor for strings is called on each member init
 
 <img src="images/class_layout_pic2.png" width="473" height="300">
 
+At the end of the constructor, the temporary strings are destroyed:
+
+<img src="images/class_layout_pic3.png" width="473" height="300">
+
+This means that we have four memory allocations although only two are necessary. Using move semantics we can do better.
+
+#### Using non-`const` Lvalue References?
+
+Why we simply not use non-`const` lvalue references here:
+
+```cpp
+class Person {
+ ...
+ Person(std::string& f, std::string& l) 
+  : first{std::move(f)}, last{std::move(l)} {
+ }
+ ...
+};
+```
+
+However, passing `const std::string` and temporary objects (e.g. created from type conversion) would not compile:
+
+```cpp
+ Person p{"Ben", "Cook"}; // ERROR: cannot bind non-constant lvalue reference to temporary
+```
+
+In general, non-const lvalue reference does not bind to a temporary object. Therefore, this constructor cannot bind `f` and `l` to temporary strings created from passed string literals. 
+
+#### Initialize Members via Moved Parameters Passed by Value
+
+With move semantics there is now a simple alternative way for constructors to initialize members:
+the constructor takes each argument by value and moves it into the member:
+
+`basics/initmove.cpp`
+
+```cpp
+#include <string>
+
+class Person {
+ private:
+  std::string first; // first name
+  std::string last;  // last name
+ public:
+  Person(std::string f, std::string l) 
+   : first{std::move(f)}, last{std::move(l)} {
+  }
+ ...
+};
+```
+
+
