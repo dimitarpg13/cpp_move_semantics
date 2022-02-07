@@ -191,3 +191,66 @@ By using `std::move()`, we move the values of the parameters to the members. Fir
 Again, at the end of the constructor, the temporary strings are destroyed. This time it takes less time because the destructors of the strings no longer have to free allocated memory:
 
 <img src="images/class_layout_pic5.png" width="473" height="300">
+
+This way to initialize the members also works fine if we pass `std::string`s:
+
+* if we pass two existing strings without marking them with `std::move()`, we copy the names to the parameters and move them to the members:
+
+```cpp
+ std::string name1{"Jane"}, name2{"White"};
+ ...
+ Person p{name1, name2}; //OK, copy names into parameters and move them to the members
+``` 
+
+* if we pass two strings where the value is no longer needed, we do not need any allocation at all:
+
+```cpp
+ std::string firstname{"Jane"};
+ ...
+ Person p{std::move(firstname), // OK, move names via parameters to members
+          getLastnameAsString()};
+```
+
+In this case we move the passed strings twice: once to initialize the parameters `f` and `l` and once to move the values of `f` and `l` to the members.
+Provided a move is cheap, with this implementation of only one constructor any initialization is possible and cheap.
+
+#### Initialize Members via Rvalue References
+
+There are even more ways to initialize the members of a Person, using multiple constructors.
+
+##### Using Rvalue References
+
+To support move semantics, we can declare a parameter as a non-`const` rvalue reference. This allows the parameter to steal the value from a passed temporary object or an object marked with `std::move()`.
+ Consider we declare the constructor as follows:
+
+```cpp
+ class Person {
+  ...
+  Person(std::string&& f, std::string&& l) 
+   : first{std::move(f)}, last{std::move(l)} {
+  }
+  ...
+ };
+```
+
+This initialization would also work for our passed string literals:
+
+```cpp
+ Person p{"Ben", "Cook"};
+```
+
+Again, because the constructor needs strings, we would create two temporary strings to which `f` and `l` bind:
+
+<img src="images/class_layout_pic1.png" width="473" height="300">
+
+And because we have non-`const` references, we can modify them. In this case, we mark them with `std::move()` so that the initialization of the members can steal the values. First, the member `first` steals the value from `f`. Then the member `last` steals the value from `l`:
+
+<img src="images/class_layout_pic4.png" width="473" height="300">
+
+Again, at the end of the constructor, the temporary strings are destroyed without the need to free allocated memory:
+
+<img src="images/class_layout_pic5.png" width="473" height="300">
+
+However, this constructor does not work in all cases.
+
+#### Overloading for Rvalue and Lvalue references
